@@ -7,15 +7,24 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.wisnumkt.capstone1.componen.BottomNews
 import com.wisnumkt.capstone1.componen.MainFitur
 import com.wisnumkt.capstone1.componen.MainTopBar
 import com.wisnumkt.capstone1.componen.RekomendList
 import com.wisnumkt.capstone1.componen.TopProfile
+import com.wisnumkt.capstone1.ui.login.AuthViewModel
 import com.wisnumkt.capstone1.ui.theme.Capstone1Theme
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    navController: NavController? = null,
+    viewModel: AuthViewModel,
+    modifier: Modifier = Modifier,
+) {
     val scrollState = rememberScrollState()
 
     Column(
@@ -25,16 +34,17 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     ) {
         MainTopBar()
         TopProfile()
-        MainFitur()
+        MainFitur(navController = navController ?: rememberNavController()) // Pass the navController parameter
         BottomNews()
         RekomendList()
     }
 }
 
-@Preview (showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    Capstone1Theme {
-        HomeScreen()
+private fun NavGraphBuilder.addHome(navController: NavController, viewModel: AuthViewModel) {
+    composable("home") {
+        HomeScreen(
+            navController = navController,
+            viewModel = viewModel
+        )
     }
 }

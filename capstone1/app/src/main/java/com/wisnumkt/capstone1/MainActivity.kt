@@ -6,8 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -17,10 +15,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
 import com.wisnumkt.capstone1.componen.BottomBar
 import com.wisnumkt.capstone1.model.BottomNavItem
-import com.wisnumkt.capstone1.ui.chat.ChatScreen
+import com.wisnumkt.capstone1.ui.search.Search
 import com.wisnumkt.capstone1.ui.home.HomeScreen
+import com.wisnumkt.capstone1.ui.login.AuthViewModel
+import com.wisnumkt.capstone1.ui.login.LoginScreen
 import com.wisnumkt.capstone1.ui.maps.MapsScreen
 import com.wisnumkt.capstone1.ui.profile.ProfileScreen
 import com.wisnumkt.capstone1.ui.theme.Capstone1Theme
@@ -30,11 +32,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Capstone1Theme {
+                val viewModel: AuthViewModel = viewModel()
+                val navController = rememberNavController()
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Capstone1()
+                    LoginScreen(viewModel = viewModel, navController = navController)
                 }
             }
         }
@@ -61,9 +66,9 @@ fun Capstone1(modifier: Modifier = Modifier) {
                 .padding(paddingValues)
         ) {
             when (currentScreen) {
-                BottomNavItem.Home -> HomeScreen()
+                BottomNavItem.Home -> HomeScreen(viewModel = viewModel())
                 BottomNavItem.Place -> MapsScreen()
-                BottomNavItem.Email -> ChatScreen()
+                BottomNavItem.Search -> Search()
                 BottomNavItem.Person -> ProfileScreen()
                 // Add other screens as necessary
             }

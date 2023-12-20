@@ -5,6 +5,7 @@ import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Place
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -37,9 +38,9 @@ fun BottomBar(
                 screen = BottomNavItem.Place
             ),
             BottomBarItem(
-                title = stringResource(id = R.string.txt_chat),
-                icon = Icons.Outlined.Email,
-                screen = BottomNavItem.Email
+                title = stringResource(id = R.string.txt_search),
+                icon = Icons.Outlined.Search,
+                screen = BottomNavItem.Search
             ),
             BottomBarItem(
                 title = stringResource(id = R.string.txt_profile),

@@ -1,12 +1,7 @@
 package com.wisnumkt.capstone1.componen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,55 +17,38 @@ import com.wisnumkt.capstone1.ui.theme.Capstone1Theme
 @Composable
 fun Filter() {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(0.dp),
-        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .height(24.dp)
+            .padding(horizontal = 8.dp)
+            .height(32.dp)  // Increased height for better touch area
             .background(color = Color(0x00000000))
-            .padding(end = 8.dp) // Adjusted padding for better visibility
     ) {
-        Text(
-            text = "Terbaik",
-            fontSize = 11.sp,
-            lineHeight = 18.sp,
-            fontWeight = FontWeight(700),
-            color = Color(0xFF00BDD6),
-            modifier = Modifier
-                .width(99.66666.dp)
-                .height(24.dp)
-                .background(color = Color(0xFFEBFDFF), shape = RoundedCornerShape(size = 12.dp))
-                .padding(start = 28.83333.dp, top = 3.dp, end = 29.83333.dp, bottom = 3.dp)
-            )
-
-        Text(
-            text = "Terdekat",
-            fontSize = 11.sp,
-            lineHeight = 18.sp,
-            fontWeight = FontWeight(400),
-            color = Color(0xFF565E6C),
-            modifier = Modifier
-                .width(120.dp)
-                .height(24.dp)
-                .padding(start = 28.83333.dp, top = 3.dp, end = 29.83333.dp, bottom = 3.dp)
-            )
-
-        Text(
-            text = "Populer",
-            fontSize = 11.sp,
-            lineHeight = 18.sp,
-            fontWeight = FontWeight(400),
-            color = Color(0xFF565E6C),
-            modifier = Modifier
-                .width(120.dp)
-                .height(24.dp)
-                .padding(start = 2.dp, top = 3.dp, end = 29.83333.dp, bottom = 3.dp)
-        )
-
+        FilterItem("Terbaik", isSelected = true)
+        FilterItem("Terdekat", isSelected = false)
+        FilterItem("Populer", isSelected = false)
     }
 }
 
-@Preview (showBackground = true)
+@Composable
+fun FilterItem(text: String, isSelected: Boolean) {
+    Text(
+        text = text,
+        fontSize = if (isSelected) 12.sp else 11.sp,  // Adjusted font size
+        lineHeight = 20.sp,
+        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+        color = if (isSelected) Color(0xFF00BDD6) else Color(0xFF565E6C),
+        modifier = Modifier
+            .background(
+                color = if (isSelected) Color(0xFFEBFDFF) else Color.Transparent,
+                shape = RoundedCornerShape(16.dp)  // Rounded shape for a better look
+            )
+            .padding(horizontal = 16.dp, vertical = 4.dp)  // Adjusted padding
+    )
+}
+
+@Preview(showBackground = true)
 @Composable
 fun FilterPreview() {
     Capstone1Theme {

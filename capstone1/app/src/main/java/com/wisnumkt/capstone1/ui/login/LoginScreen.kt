@@ -1,17 +1,12 @@
 package com.wisnumkt.capstone1.ui.login
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -20,11 +15,19 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.wisnumkt.capstone1.ui.theme.Capstone1Theme
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen() {
+fun LoginScreen(viewModel: AuthViewModel, navController: NavController) {
+    val isAuthenticated: State<Boolean> = viewModel.isAuthenticated
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -36,61 +39,71 @@ fun LoginScreen() {
             fontWeight = FontWeight.Normal,
             color = Color.Black,
             modifier = Modifier
-                .offset(x = 157.dp, y = 300.dp)
                 .fillMaxWidth()
                 .fillMaxHeight()
-        )
-        TextField(
-            value = "",
-            onValueChange = {},
-            label = { Text("Email") },
-            keyboardOptions = KeyboardOptions.Default,
-            modifier = Modifier
-                .offset(y = 338.dp)
-                .padding(16.dp)
-                .fillMaxWidth()
+                .offset(x = 157.dp, y = 300.dp)
         )
 
         TextField(
-            value = "",
-            onValueChange = {},
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Email") },
+            singleLine = true,
+            leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = null) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .offset(y = 338.dp)
+        )
+
+        TextField(
+            value = password,
+            onValueChange = { password = it },
             label = { Text("Password") },
+            singleLine = true,
+            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = null) },
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Password
             ),
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier
-                .offset(y = 420.dp)
-                .padding(16.dp)
                 .fillMaxWidth()
+                .padding(16.dp)
+                .offset(y = 420.dp)
         )
 
         Button(
-            onClick = { /* Aksi ketika tombol Login ditekan */ },
+            onClick = {
+                // Panggil fungsi login dari AuthViewModel dengan menggunakan Firebase
+                GlobalScope.launch {
+                    viewModel.login(email, password, navController)
+                }
+            },
             modifier = Modifier
-                .offset(y = 498.dp)
-                .padding(16.dp)
                 .fillMaxWidth()
+                .padding(16.dp)
+                .offset(y = 498.dp)
         ) {
             Text("Login")
         }
 
         Button(
-            onClick = { /* Aksi ketika tombol Register ditekan */ },
+            onClick = { /* Action when the Register button is pressed */ },
             modifier = Modifier
-                .offset(y = 550.dp)
-                .padding(16.dp)
                 .fillMaxWidth()
+                .padding(16.dp)
+                .offset(y = 550.dp)
         ) {
             Text("Register")
         }
     }
 }
 
-@Preview (showBackground = true)
+@Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
+    val fakeViewModel = AuthViewModel()
     Capstone1Theme {
-        LoginScreen()
+        LoginScreen(viewModel = fakeViewModel, navController = rememberNavController())
     }
 }
